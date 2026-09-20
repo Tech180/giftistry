@@ -1,0 +1,19 @@
+# Giftistry web — Vite build + nginx (SPA + API/WebSocket proxy)
+#
+# Build context: parent directory containing giftistry-react/ and giftistry/
+
+FROM oven/bun:1.2-debian AS build
+WORKDIR /web
+COPY giftistry-react/package.json giftistry-react/bun.lock ./
+RUN bun install --frozen-lockfile
+COPY giftistry-react/ ./
+ARG VITE_API_URL=
+ENV VITE_API_URL=${VITE_API_URL}
+RUN bun run build
+
+FROM nginx:1.27-alpine AS runtime
+COPY giftistry/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /web/build /usr/share/nginx/html
+EXPOSE 80
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
+  CMD wget -qO- http://127.0.0.1/ >/dev/null || exit 1

@@ -1,0 +1,13 @@
+# Local / generated
+.env
+docker/config/config.json
+**/node_modules/
+.local/
+.result/
+result
+result-*
+
+# Nix
+nix/result
+nix/result-*
+.direnv/

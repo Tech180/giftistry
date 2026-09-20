@@ -1,0 +1,109 @@
+{
+  "nodes": {
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "giftistry-bun": {
+      "flake": false,
+      "locked": {
+        "dirtyRev": "e0b8fb0904a6d331ba44fd892a799f74c58f3b84-dirty",
+        "dirtyShortRev": "e0b8fb0-dirty",
+        "lastModified": 1789934087,
+        "narHash": "sha256-5uPT6Z5tcw8cP/HTEyypf6Qp593d3c9Rk2bqYciAJ40=",
+        "type": "git",
+        "url": "file:///home/tech180/Documents/projects/giftistry-bun"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/tech180/Documents/projects/giftistry-bun"
+      }
+    },
+    "giftistry-react": {
+      "flake": false,
+      "locked": {
+        "dirtyRev": "0319593b6fedbf6391fb31ed9177c91caafdfece-dirty",
+        "dirtyShortRev": "0319593-dirty",
+        "lastModified": 1789885167,
+        "narHash": "sha256-H7Nkx+l4ii4BYJnm43ZnmQzBMvGmmyqqU/zSR11Ebh0=",
+        "type": "git",
+        "url": "file:///home/tech180/Documents/projects/giftistry-react"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/tech180/Documents/projects/giftistry-react"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1789785513,
+        "narHash": "sha256-B44WL6h0XoLjJ41bUPJk0X5SDinLCII//6EcBLXKiJ0=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "20b1ddd1aa5ace70c9468305030aa4f9ef79671b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "giftistry-bun": "giftistry-bun",
+        "giftistry-react": "giftistry-react",
+        "nixpkgs": "nixpkgs",
+        "theming-engine": "theming-engine"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "theming-engine": {
+      "flake": false,
+      "locked": {
+        "dirtyRev": "cc6bce33bd2ffe8ac4a0be0fe79f5a7eb283ab0c-dirty",
+        "dirtyShortRev": "cc6bce3-dirty",
+        "lastModified": 1784435600,
+        "narHash": "sha256-SKG87DInDUWIg+xtQwF7YysT04cMufRuhE7YpSjHMpE=",
+        "type": "git",
+        "url": "file:///home/tech180/Documents/projects/theming-engine"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/tech180/Documents/projects/theming-engine"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

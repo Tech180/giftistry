@@ -1,0 +1,148 @@
+# Giftistry stack — run from this directory (siblings must sit beside giftistry/):
+#
+#   projects/
+#     giftistry/          # this repo
+#     giftistry-bun/
+#     giftistry-react/
+#     theming-engine/
+#
+#   cp .env.example .env
+#   cp config/config.example.json config/config.json
+#   # edit .env — set PGPASSWORD and JWT_SECRET (≥ 32 chars)
+#   docker compose up -d --build
+#
+# Optional Mailpit (local SMTP + web UI):
+#   docker compose --profile mail up -d
+
+name: giftistry
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGUSER:-giftistry}
+      POSTGRES_PASSWORD: ${PGPASSWORD:?Set PGPASSWORD in .env}
+      POSTGRES_DB: ${PGDATABASE:-giftistry}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${PGUSER:-giftistry} -d ${PGDATABASE:-giftistry}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  api:
+    build:
+      context: ../..
+      dockerfile: giftistry/docker/api.Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      GIFTISTRY_PROCESS_ROLE: api
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: ${PGUSER:-giftistry}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE:-giftistry}
+      JWT_SECRET: ${JWT_SECRET:-}
+      JWT_SECRET_FILE: ${JWT_SECRET_FILE:-}
+      CREDENTIALS_DIRECTORY: ${CREDENTIALS_DIRECTORY:-}
+      GIFTISTRY_CREDENTIALS_DIRECTORY: ${GIFTISTRY_CREDENTIALS_DIRECTORY:-}
+      GIFTISTRY_CONFIG_PATH: /etc/giftistry/config.json
+      GIFTISTRY_PUBLIC_APP_URL: ${GIFTISTRY_PUBLIC_APP_URL:-http://localhost:${WEB_PORT:-8080}}
+      GIFTISTRY_ALLOW_SETUP: ${GIFTISTRY_ALLOW_SETUP:-true}
+      GIFTISTRY_SETUP_TOKEN: ${GIFTISTRY_SETUP_TOKEN:-}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_FROM: ${SMTP_FROM:-noreply@giftistry.local}
+    volumes:
+      - ./config/config.json:/etc/giftistry/config.json
+      - giftistry_data:/var/lib/giftistry
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - '3001'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'bun',
+          '-e',
+          "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 40s
+      retries: 3
+
+  worker:
+    build:
+      context: ../..
+      dockerfile: giftistry/docker/api.Dockerfile
+    restart: unless-stopped
+    command: ['bun', 'run', '--no-env-file', 'src/worker.ts']
+    environment:
+      NODE_ENV: production
+      GIFTISTRY_PROCESS_ROLE: worker
+      PGHOST: postgres
+      PGPORT: 5432
+      PGUSER: ${PGUSER:-giftistry}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE:-giftistry}
+      JWT_SECRET: ${JWT_SECRET:-}
+      JWT_SECRET_FILE: ${JWT_SECRET_FILE:-}
+      CREDENTIALS_DIRECTORY: ${CREDENTIALS_DIRECTORY:-}
+      GIFTISTRY_CREDENTIALS_DIRECTORY: ${GIFTISTRY_CREDENTIALS_DIRECTORY:-}
+      GIFTISTRY_CONFIG_PATH: /etc/giftistry/config.json
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_FROM: ${SMTP_FROM:-noreply@giftistry.local}
+    volumes:
+      - ./config/config.json:/etc/giftistry/config.json
+      - giftistry_data:/var/lib/giftistry
+    depends_on:
+      postgres:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'bun',
+          '-e',
+          "const r=process.env.GIFTISTRY_PROCESS_ROLE; if(r!=='worker') process.exit(1)",
+        ]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+  web:
+    build:
+      context: ../..
+      dockerfile: giftistry/docker/web.Dockerfile
+      args:
+        VITE_API_URL: ''
+    restart: unless-stopped
+    ports:
+      - '${WEB_PORT:-8080}:80'
+    depends_on:
+      api:
+        condition: service_healthy
+
+  mailpit:
+    profiles: [mail]
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - '${MAILPIT_UI_PORT:-8025}:8025'
+      - '${MAILPIT_SMTP_PORT:-1025}:1025'
+
+volumes:
+  postgres_data:
+  giftistry_data:
