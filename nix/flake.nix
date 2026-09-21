@@ -37,7 +37,7 @@
         final: _prev:
         let
           giftistry-api = final.callPackage ./packages/api.nix {
-            inherit giftistry-bun theming-engine;
+            inherit giftistry-bun giftistry-react theming-engine;
           };
           giftistry-web = final.callPackage ./packages/web.nix {
             inherit giftistry-react;
@@ -100,7 +100,6 @@
               services.giftistry = {
                 enable = true;
                 publicAppUrl = "https://gifts.example.com";
-                jwtSecretFile = "/run/credentials/giftistry/JWT_SECRET";
                 package = giftistry;
                 database.createLocal = false;
               };

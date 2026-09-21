@@ -16,7 +16,8 @@
     enable = true;
     package = pkgs.giftistry; # API + worker + web assets + giftistry-db
     publicAppUrl = "https://gifts.example.com";
-    jwtSecretFile = "/run/secrets/giftistry-jwt";
+    # Optional — omit to let Bun auto-persist JWT under stateDir/jwt_secret
+    # jwtSecretFile = "/run/secrets/giftistry-jwt";
     port = 3001;
 
     database = {

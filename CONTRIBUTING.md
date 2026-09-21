@@ -20,7 +20,8 @@ Thanks for helping with Giftistry packaging.
 
 ## PR checklist
 
-- [ ] Compose still validates (`docker compose -f docker/compose.yaml config`)
+- [ ] Compose still validates (`PGPASSWORD=ci COMPOSE_PROFILES=db docker compose -f docker/compose.yaml config`)
 - [ ] Nix flake still evaluates (`nix flake check` in `nix/`)
 - [ ] Docs updated if operator steps changed
 - [ ] SQL mirrors updated only when synced with bun migrations (see schema.md)
+- [ ] Image pins: bump `GIFTISTRY_VERSION` / `docker/versions.env` when cutting a release

@@ -1,4 +1,4 @@
-# Giftistry API — multi-stage Bun image
+# Giftistry API — multi-stage Bun image (giftistry-server)
 #
 # Build context must be the parent directory that contains:
 #   giftistry-bun/, theming-engine/, (optional) giftistry-react/
@@ -11,6 +11,11 @@
 #
 # Config:
 #   GIFTISTRY_CONFIG_PATH   — path to config.json (SMTP, AI, OAuth settings)
+#
+# Image includes Playwright Chromium for scraping (~large). Prefer GHCR pulls for operators.
+
+ARG GIFTISTRY_VERSION=dev
+ARG GIFTISTRY_SOURCE=https://github.com/Tech180/giftistry
 
 FROM oven/bun:1.2-debian AS deps
 WORKDIR /app
@@ -33,6 +38,14 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/app/.playwright
 RUN bunx playwright install chromium --with-deps
 
 FROM oven/bun:1.2-debian AS runtime
+ARG GIFTISTRY_VERSION=dev
+ARG GIFTISTRY_SOURCE=https://github.com/Tech180/giftistry
+LABEL org.opencontainers.image.title="Giftistry server" \
+  org.opencontainers.image.description="Giftistry API and background worker" \
+  org.opencontainers.image.source="${GIFTISTRY_SOURCE}" \
+  org.opencontainers.image.version="${GIFTISTRY_VERSION}" \
+  org.opencontainers.image.licenses="SEE LICENSE IN LICENSE"
+
 WORKDIR /app
 ENV NODE_ENV=production \
     PORT=3001 \

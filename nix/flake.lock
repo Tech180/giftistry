@@ -24,7 +24,7 @@
         "dirtyRev": "e0b8fb0904a6d331ba44fd892a799f74c58f3b84-dirty",
         "dirtyShortRev": "e0b8fb0-dirty",
         "lastModified": 1789934087,
-        "narHash": "sha256-5uPT6Z5tcw8cP/HTEyypf6Qp593d3c9Rk2bqYciAJ40=",
+        "narHash": "sha256-EF9VRhxPGVL6iUSp8ZDq4yJ/KBttjrpidGJahI4dqc4=",
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/giftistry-bun"
       },
@@ -39,7 +39,7 @@
         "dirtyRev": "0319593b6fedbf6391fb31ed9177c91caafdfece-dirty",
         "dirtyShortRev": "0319593-dirty",
         "lastModified": 1789885167,
-        "narHash": "sha256-H7Nkx+l4ii4BYJnm43ZnmQzBMvGmmyqqU/zSR11Ebh0=",
+        "narHash": "sha256-hX1qZ4ufecpGO/ZMHMQX9hipifEI3gu5y6JTLSsI0Yw=",
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/giftistry-react"
       },
@@ -94,7 +94,7 @@
         "dirtyRev": "cc6bce33bd2ffe8ac4a0be0fe79f5a7eb283ab0c-dirty",
         "dirtyShortRev": "cc6bce3-dirty",
         "lastModified": 1784435600,
-        "narHash": "sha256-SKG87DInDUWIg+xtQwF7YysT04cMufRuhE7YpSjHMpE=",
+        "narHash": "sha256-x/bKFsI6U3rkgVldIg962OHqjpJpmrdwYKwJbfZrKY0=",
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/theming-engine"
       },

@@ -4,6 +4,7 @@
   bun,
   makeWrapper,
   giftistry-bun,
+  giftistry-react,
   theming-engine,
 }:
 stdenvNoCC.mkDerivation {
@@ -24,6 +25,8 @@ stdenvNoCC.mkDerivation {
     chmod -R u+w $out/lib/giftistry-bun
     cp -a ${theming-engine} $out/lib/theming-engine
     chmod -R u+w $out/lib/theming-engine
+    cp -a ${giftistry-react} $out/lib/giftistry-react
+    chmod -R u+w $out/lib/giftistry-react
 
     # Wrappers for convenience (NixOS module prefers bun + stateDir app copy).
     makeWrapper ${bun}/bin/bun $out/bin/giftistry-api \
@@ -41,7 +44,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "Giftistry API and worker sources (Bun deps installed at service start)";
+    description = "Giftistry API, worker, and web sources (Bun deps installed at service start)";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };

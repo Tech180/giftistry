@@ -1,5 +1,7 @@
 # Local / generated
 .env
+.env.validate
+.env.validate.*
 docker/config/config.json
 **/node_modules/
 .local/

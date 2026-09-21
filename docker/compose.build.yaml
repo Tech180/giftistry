@@ -1,0 +1,33 @@
+# Maintainer overlay — build images from sibling checkouts instead of pulling GHCR.
+#
+# Required layout (parent of giftistry/):
+#
+#   projects/
+#     giftistry/
+#     giftistry-bun/
+#     giftistry-react/
+#     theming-engine/
+#
+#   cd giftistry/docker
+#   docker compose -f compose.yaml -f compose.build.yaml up -d --build
+
+services:
+  api:
+    image: giftistry-server:local
+    build:
+      context: ../..
+      dockerfile: giftistry/docker/api.Dockerfile
+
+  worker:
+    image: giftistry-server:local
+    build:
+      context: ../..
+      dockerfile: giftistry/docker/api.Dockerfile
+
+  web:
+    image: giftistry-web:local
+    build:
+      context: ../..
+      dockerfile: giftistry/docker/web.Dockerfile
+      args:
+        VITE_API_URL: ''

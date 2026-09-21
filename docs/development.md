@@ -45,4 +45,9 @@ Architecture notes live in the app repos (domain / use-cases / infrastructure). 
 
 ## Production-like stack
 
-Use [install/docker.md](install/docker.md) for a full compose stack on the same sibling layout.
+Use [install/docker.md](install/docker.md) for pull-based Compose. Maintainers with siblings beside this repo can build locally:
+
+```bash
+cd giftistry/docker
+docker compose -f compose.yaml -f compose.build.yaml up -d --build
+```

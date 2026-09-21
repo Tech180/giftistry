@@ -59,7 +59,7 @@ giftistry.inputs.theming-engine.url = "github:YOUR_ORG/theming-engine";
     enable = true;
     package = pkgs.giftistry;
     publicAppUrl = "https://gifts.example.com";
-    jwtSecretFile = config.sops.secrets.giftistry-jwt.path;
+    # jwtSecretFile = config.sops.secrets.giftistry-jwt.path; # optional; else auto under stateDir
   };
 
   # You own the edge — example:
@@ -84,7 +84,7 @@ Full snippet: [`nix/examples/configuration.nix`](../../nix/examples/configuratio
 | `port` | `3001` | API listen port |
 | `configFile` | `/etc/giftistry/config.json` | Config path |
 | `stateDir` | `/var/lib/giftistry` | State + Bun `node_modules` |
-| `jwtSecretFile` | required | `LoadCredential` → `JWT_SECRET` |
+| `jwtSecretFile` | `null` | Optional `LoadCredential` → `JWT_SECRET`. When unset, Bun auto-persists `${stateDir}/jwt_secret` |
 | `credentialsDirectory` | `null` | Extra credentials dir |
 | `database.createLocal` | `true` | `ensureDatabases` / `ensureUsers` only |
 | `database.*` | — | External host / password file |
@@ -92,7 +92,7 @@ Full snippet: [`nix/examples/configuration.nix`](../../nix/examples/configuratio
 
 **Not in this module:** nginx, ACME, firewall ports — configure those yourself (see [reverse-proxy.md](../reverse-proxy.md)).
 
-**Secrets:** sops-nix (or similar) for `jwtSecretFile`. systemd sets `CREDENTIALS_DIRECTORY`.
+**Secrets:** Prefer sops-nix (or similar) for `jwtSecretFile` on multi-host setups. If omitted, Bun writes `${stateDir}/jwt_secret` on first boot (back up `stateDir`). systemd `LoadCredential` sets `CREDENTIALS_DIRECTORY` when `jwtSecretFile` is set.
 
 **Web assets:** pure `giftistry-web` is a placeholder. For a real SPA, build `giftistry-web-bundle --impure` and override the web input of the umbrella, or serve Compose-built assets. Point your proxy `root` at `${pkgs.giftistry}/share/giftistry-web`.
 

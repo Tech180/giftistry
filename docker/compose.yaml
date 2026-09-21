@@ -1,24 +1,25 @@
-# Giftistry stack — run from this directory (siblings must sit beside giftistry/):
-#
-#   projects/
-#     giftistry/          # this repo
-#     giftistry-bun/
-#     giftistry-react/
-#     theming-engine/
+# Giftistry stack — Immich-style pull-and-run (from this directory):
 #
 #   cp .env.example .env
 #   cp config/config.example.json config/config.json
-#   # edit .env — set PGPASSWORD and JWT_SECRET (≥ 32 chars)
-#   docker compose up -d --build
+#   # edit .env — set PGPASSWORD (JWT_SECRET optional; Bun auto-persists if omitted)
+#   docker compose up -d
+#
+# Bundled Postgres is on via COMPOSE_PROFILES=db. Comment that line out to use
+# an external/local database (set PGHOST accordingly).
 #
 # Optional Mailpit (local SMTP + web UI):
 #   docker compose --profile mail up -d
+#
+# Build from sibling source (maintainers):
+#   docker compose -f compose.yaml -f compose.build.yaml up -d --build
 
 name: giftistry
 
 services:
   postgres:
     image: postgres:16-alpine
+    profiles: [db]
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${PGUSER:-giftistry}
@@ -34,16 +35,14 @@ services:
       start_period: 10s
 
   api:
-    build:
-      context: ../..
-      dockerfile: giftistry/docker/api.Dockerfile
+    image: ghcr.io/${GHCR_OWNER:-Tech180}/giftistry-server:${GIFTISTRY_VERSION:-v0.0.22}
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: 3001
       GIFTISTRY_PROCESS_ROLE: api
-      PGHOST: postgres
-      PGPORT: 5432
+      PGHOST: ${PGHOST:-postgres}
+      PGPORT: ${PGPORT:-5432}
       PGUSER: ${PGUSER:-giftistry}
       PGPASSWORD: ${PGPASSWORD}
       PGDATABASE: ${PGDATABASE:-giftistry}
@@ -52,9 +51,11 @@ services:
       CREDENTIALS_DIRECTORY: ${CREDENTIALS_DIRECTORY:-}
       GIFTISTRY_CREDENTIALS_DIRECTORY: ${GIFTISTRY_CREDENTIALS_DIRECTORY:-}
       GIFTISTRY_CONFIG_PATH: /etc/giftistry/config.json
+      GIFTISTRY_STATE_DIR: /var/lib/giftistry
       GIFTISTRY_PUBLIC_APP_URL: ${GIFTISTRY_PUBLIC_APP_URL:-http://localhost:${WEB_PORT:-8080}}
       GIFTISTRY_ALLOW_SETUP: ${GIFTISTRY_ALLOW_SETUP:-true}
       GIFTISTRY_SETUP_TOKEN: ${GIFTISTRY_SETUP_TOKEN:-}
+      GIFTISTRY_AUTO_JWT_SECRET: ${GIFTISTRY_AUTO_JWT_SECRET:-true}
       SMTP_HOST: ${SMTP_HOST:-mailpit}
       SMTP_PORT: ${SMTP_PORT:-1025}
       SMTP_FROM: ${SMTP_FROM:-noreply@giftistry.local}
@@ -64,6 +65,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+        required: false
     expose:
       - '3001'
     healthcheck:
@@ -80,16 +82,14 @@ services:
       retries: 3
 
   worker:
-    build:
-      context: ../..
-      dockerfile: giftistry/docker/api.Dockerfile
+    image: ghcr.io/${GHCR_OWNER:-Tech180}/giftistry-server:${GIFTISTRY_VERSION:-v0.0.22}
     restart: unless-stopped
     command: ['bun', 'run', '--no-env-file', 'src/worker.ts']
     environment:
       NODE_ENV: production
       GIFTISTRY_PROCESS_ROLE: worker
-      PGHOST: postgres
-      PGPORT: 5432
+      PGHOST: ${PGHOST:-postgres}
+      PGPORT: ${PGPORT:-5432}
       PGUSER: ${PGUSER:-giftistry}
       PGPASSWORD: ${PGPASSWORD}
       PGDATABASE: ${PGDATABASE:-giftistry}
@@ -98,6 +98,8 @@ services:
       CREDENTIALS_DIRECTORY: ${CREDENTIALS_DIRECTORY:-}
       GIFTISTRY_CREDENTIALS_DIRECTORY: ${GIFTISTRY_CREDENTIALS_DIRECTORY:-}
       GIFTISTRY_CONFIG_PATH: /etc/giftistry/config.json
+      GIFTISTRY_STATE_DIR: /var/lib/giftistry
+      GIFTISTRY_AUTO_JWT_SECRET: ${GIFTISTRY_AUTO_JWT_SECRET:-true}
       SMTP_HOST: ${SMTP_HOST:-mailpit}
       SMTP_PORT: ${SMTP_PORT:-1025}
       SMTP_FROM: ${SMTP_FROM:-noreply@giftistry.local}
@@ -107,6 +109,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+        required: false
       api:
         condition: service_healthy
     healthcheck:
@@ -123,11 +126,7 @@ services:
       retries: 3
 
   web:
-    build:
-      context: ../..
-      dockerfile: giftistry/docker/web.Dockerfile
-      args:
-        VITE_API_URL: ''
+    image: ghcr.io/${GHCR_OWNER:-Tech180}/giftistry-web:${GIFTISTRY_VERSION:-v0.0.22}
     restart: unless-stopped
     ports:
       - '${WEB_PORT:-8080}:80'

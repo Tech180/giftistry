@@ -2,6 +2,9 @@
 #
 # Build context: parent directory containing giftistry-react/ and giftistry/
 
+ARG GIFTISTRY_VERSION=dev
+ARG GIFTISTRY_SOURCE=https://github.com/Tech180/giftistry
+
 FROM oven/bun:1.2-debian AS build
 WORKDIR /web
 COPY giftistry-react/package.json giftistry-react/bun.lock ./
@@ -12,6 +15,14 @@ ENV VITE_API_URL=${VITE_API_URL}
 RUN bun run build
 
 FROM nginx:1.27-alpine AS runtime
+ARG GIFTISTRY_VERSION=dev
+ARG GIFTISTRY_SOURCE=https://github.com/Tech180/giftistry
+LABEL org.opencontainers.image.title="Giftistry web" \
+  org.opencontainers.image.description="Giftistry SPA served by nginx" \
+  org.opencontainers.image.source="${GIFTISTRY_SOURCE}" \
+  org.opencontainers.image.version="${GIFTISTRY_VERSION}" \
+  org.opencontainers.image.licenses="SEE LICENSE IN LICENSE"
+
 COPY giftistry/docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /web/build /usr/share/nginx/html
 EXPOSE 80

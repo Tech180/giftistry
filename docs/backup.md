@@ -7,7 +7,7 @@
 | PostgreSQL | `postgres_data` volume | local cluster or external DB |
 | App state | `giftistry_data` → `/var/lib/giftistry` | `services.giftistry.stateDir` |
 | Config | `docker/config/config.json` | `/etc/giftistry/config.json` |
-| Secrets | `.env` / secret files | `jwtSecretFile`, sops, etc. |
+| Secrets | `.env` / secret files; auto JWT at `giftistry_data` → `/var/lib/giftistry/jwt_secret` | `jwtSecretFile` or `${stateDir}/jwt_secret` when auto |
 
 ## Dump the database
 
@@ -39,4 +39,4 @@ Do **not** apply `nix/sql/schema.sql` on top of a restored production dump unles
 
 ## Config and secrets
 
-Keep JWT and DB passwords out of the database dump backups when possible (store them in your secret manager). Rotating `JWT_SECRET` invalidates existing sessions/tokens.
+Keep DB passwords out of the database dump. The auto-generated JWT lives in the **app state volume** (`/var/lib/giftistry/jwt_secret`) — include that volume in backups. Rotating JWT (delete the file, change `JWT_SECRET`, or replace `jwtSecretFile`) invalidates existing sessions/tokens.
