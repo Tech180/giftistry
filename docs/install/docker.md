@@ -79,7 +79,7 @@ cd giftistry/docker
 docker compose -f compose.yaml -f compose.build.yaml up -d --build
 ```
 
-The web image builds `theming-engine` first so `sync:theme-catalog` can run during `bun run build`.
+The web image builds `theming-engine` first so `sync:theme-catalog` can run, then runs Vite only (same as the NixOS prepare-web path; `tsc` stays in CI).
 
 CI publishes images on `v*` tags — see `.github/workflows/publish-images.yml` and `docker/versions.env`. Private app repos need a repo secret `APP_REPO_TOKEN` with read access.
 

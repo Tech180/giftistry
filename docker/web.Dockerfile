@@ -24,8 +24,10 @@ COPY giftistry-react/ ./
 COPY --from=theming /theming-engine/dist /theming-engine/dist
 ARG VITE_API_URL=
 ENV VITE_API_URL=${VITE_API_URL}
+# Same as Nix prepare-web: sync catalog then vite only (skip tsc — typecheck is CI).
 RUN test -f /theming-engine/dist/js/theme-catalog.json \
-  && bun run build
+  && bun run sync:theme-catalog \
+  && ./node_modules/.bin/vite build
 
 FROM nginx:1.27-alpine AS runtime
 ARG GIFTISTRY_VERSION=dev
