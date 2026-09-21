@@ -72,12 +72,14 @@ docker compose exec api bun run giftistry-admin --help
 
 ## Build from source (maintainers)
 
-Sibling layout next to this repo, then:
+Sibling layout next to this repo (`giftistry-bun`, `giftistry-react`, `theming-engine`), then:
 
 ```bash
 cd giftistry/docker
 docker compose -f compose.yaml -f compose.build.yaml up -d --build
 ```
+
+The web image builds `theming-engine` first so `sync:theme-catalog` can run during `bun run build`.
 
 CI publishes images on `v*` tags — see `.github/workflows/publish-images.yml` and `docker/versions.env`. Private app repos need a repo secret `APP_REPO_TOKEN` with read access.
 

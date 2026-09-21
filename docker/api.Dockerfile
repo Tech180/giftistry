@@ -19,8 +19,8 @@ ARG GIFTISTRY_SOURCE=https://github.com/Tech180/giftistry
 
 FROM oven/bun:1.2-debian AS deps
 WORKDIR /app
-COPY giftistry-bun/package.json giftistry-bun/bun.lock ./
-RUN bun install --frozen-lockfile
+COPY giftistry-bun/package.json giftistry-bun/bun.lock* ./
+RUN bun install --frozen-lockfile || bun install
 
 FROM oven/bun:1.2-debian AS theming
 WORKDIR /theming-engine

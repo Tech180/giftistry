@@ -2,11 +2,10 @@
 #
 # Required layout (parent of giftistry/):
 #
-#   projects/
-#     giftistry/
-#     giftistry-bun/
-#     giftistry-react/
-#     theming-engine/
+#   giftistry/
+#   giftistry-bun/
+#   giftistry-react/
+#   theming-engine/
 #
 #   cd giftistry/docker
 #   docker compose -f compose.yaml -f compose.build.yaml up -d --build
