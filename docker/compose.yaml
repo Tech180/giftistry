@@ -1,4 +1,4 @@
-# Giftistry stack — Immich-style pull-and-run (from this directory):
+# Giftistry stack — pull-and-run (from this directory):
 #
 #   cp .env.example .env
 #   cp config/config.example.json config/config.json
@@ -35,7 +35,7 @@ services:
       start_period: 10s
 
   api:
-    image: ghcr.io/${GHCR_OWNER:-Tech180}/giftistry-server:${GIFTISTRY_VERSION:-v0.0.22}
+    image: ghcr.io/${GHCR_OWNER:-tech180}/giftistry-server:${GIFTISTRY_VERSION:-v0.0.22}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -82,7 +82,7 @@ services:
       retries: 3
 
   worker:
-    image: ghcr.io/${GHCR_OWNER:-Tech180}/giftistry-server:${GIFTISTRY_VERSION:-v0.0.22}
+    image: ghcr.io/${GHCR_OWNER:-tech180}/giftistry-server:${GIFTISTRY_VERSION:-v0.0.22}
     restart: unless-stopped
     command: ['bun', 'run', '--no-env-file', 'src/worker.ts']
     environment:
@@ -126,7 +126,7 @@ services:
       retries: 3
 
   web:
-    image: ghcr.io/${GHCR_OWNER:-Tech180}/giftistry-web:${GIFTISTRY_VERSION:-v0.0.22}
+    image: ghcr.io/${GHCR_OWNER:-tech180}/giftistry-web:${GIFTISTRY_VERSION:-v0.0.22}
     restart: unless-stopped
     ports:
       - '${WEB_PORT:-8080}:80'

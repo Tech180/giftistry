@@ -60,7 +60,9 @@ jobs:
           echo "react_ref=${REACT_REF:-$GIFTISTRY_REACT_REF}" >> "$GITHUB_OUTPUT"
           echo "theming_repo=${THEMING_ENGINE_REPO}" >> "$GITHUB_OUTPUT"
           echo "theming_ref=${THEMING_REF:-$THEMING_ENGINE_REF}" >> "$GITHUB_OUTPUT"
-          echo "owner=${GITHUB_REPOSITORY_OWNER}" >> "$GITHUB_OUTPUT"
+          # Docker/OCI refs must be lowercase (GHCR rejects Tech180/…)
+          OWNER="$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')"
+          echo "owner=${OWNER}" >> "$GITHUB_OUTPUT"
 
       - name: Checkout giftistry-bun
         uses: actions/checkout@v4

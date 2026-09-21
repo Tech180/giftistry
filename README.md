@@ -61,7 +61,7 @@ Full guide: [docs/install/docker.md](docs/install/docker.md).
 
 ### NixOS
 
-Import the package overlay + module; you own nginx/firewall:
+Import the package overlay + module. The API listens on a port (default 3001); **you** own TLS / firewall / reverse proxy (Nginx Proxy Manager, Caddy, Traefik, host nginx, …). Optional `web.enable` can start a local NixOS nginx SPA for sandboxing — not required for production.
 
 ```nix
 nixpkgs.overlays = [ inputs.giftistry.overlays.default ];
@@ -70,11 +70,12 @@ services.giftistry = {
   enable = true;
   package = pkgs.giftistry;
   publicAppUrl = "https://gifts.example.com";
-  jwtSecretFile = "/run/secrets/giftistry-jwt";
+  web.enable = false; # use NPM / external proxy; set true for local :3000 SPA
+  # jwtSecretFile = "/run/secrets/giftistry-jwt"; # optional; else auto under stateDir
 };
 ```
 
-Full guide: [docs/install/nixos.md](docs/install/nixos.md). Example: [nix/examples/configuration.nix](nix/examples/configuration.nix).
+Full guide: [docs/install/nixos.md](docs/install/nixos.md). Edge paths: [docs/reverse-proxy.md](docs/reverse-proxy.md). Example: [nix/examples/configuration.nix](nix/examples/configuration.nix).
 
 ## Documentation
 
@@ -83,14 +84,14 @@ Full guide: [docs/install/nixos.md](docs/install/nixos.md). Example: [nix/exampl
 | [Docker install](docs/install/docker.md) | Pull images, env, external DB, Mailpit |
 | [NixOS install](docs/install/nixos.md) | Package + module, giftistry-db, your proxy |
 | [Schema](docs/schema.md) | Bun migrations vs sandbox SQL mirrors |
-| [Reverse proxy](docs/reverse-proxy.md) | Traefik / Caddy / external nginx |
+| [Reverse proxy](docs/reverse-proxy.md) | NPM / Caddy / Traefik / host nginx |
 | [Backup](docs/backup.md) | Postgres + state + config |
 | [Development](docs/development.md) | `nix develop`, sibling app repos |
 
 ## Stack
 
 - **API / worker:** Bun + Elysia + PostgreSQL  
-- **Web:** React (Vite) behind nginx  
+- **Web:** React (Vite); Docker image or optional NixOS nginx serves the SPA  
 - **Realtime:** WebSockets + Postgres LISTEN/NOTIFY  
 - **Deploy:** Docker Compose (GHCR) or NixOS systemd  
 

@@ -1,6 +1,6 @@
 # Docker Compose install
 
-Pull prebuilt images from GHCR (Immich-style). You only need this packaging repo — not `giftistry-bun` / `giftistry-react` / `theming-engine` on the server.
+Pull prebuilt images from GHCR. You only need this packaging repo — not `giftistry-bun` / `giftistry-react` / `theming-engine` on the server.
 
 ## Quick start
 
@@ -27,7 +27,7 @@ docker compose up -d
 
 | Variable | Notes |
 |----------|--------|
-| `GHCR_OWNER` | Image namespace (default `Tech180`) |
+| `GHCR_OWNER` | Image namespace (default `tech180`; must be lowercase for Docker) |
 | `GIFTISTRY_VERSION` | Image tag pin (e.g. `v0.0.22`) |
 | `COMPOSE_PROFILES` | Default `db` starts bundled Postgres. **Comment out this one line** to use an external/local DB |
 | `PGHOST` | Default `postgres` (compose service). Set to `host.docker.internal` or your DB host when `db` profile is off |
