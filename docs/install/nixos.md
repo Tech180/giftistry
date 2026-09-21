@@ -42,6 +42,14 @@ giftistry = {
 };
 ```
 
+After updating sibling app repos, refresh packaging locks then the host flake:
+
+```bash
+cd /path/to/giftistry/nix && nix flake update giftistry-bun giftistry-react theming-engine
+# if /etc/nixos consumes this flake:
+cd /etc/nixos && nix flake update giftistry
+```
+
 Override app sources when not using local `git+file://` defaults:
 
 ```nix

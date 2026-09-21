@@ -21,10 +21,11 @@
     "giftistry-bun": {
       "flake": false,
       "locked": {
-        "dirtyRev": "e0b8fb0904a6d331ba44fd892a799f74c58f3b84-dirty",
-        "dirtyShortRev": "e0b8fb0-dirty",
-        "lastModified": 1789934087,
-        "narHash": "sha256-EF9VRhxPGVL6iUSp8ZDq4yJ/KBttjrpidGJahI4dqc4=",
+        "lastModified": 1789953118,
+        "narHash": "sha256-6rUVXvINYaNkFicGkZBWVJJt55VOh99UMDWOqy/jpP8=",
+        "ref": "refs/heads/main",
+        "rev": "ca3f75e6ff794ccdf47d721173c7644bc099fdef",
+        "revCount": 27,
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/giftistry-bun"
       },
@@ -36,10 +37,11 @@
     "giftistry-react": {
       "flake": false,
       "locked": {
-        "dirtyRev": "0319593b6fedbf6391fb31ed9177c91caafdfece-dirty",
-        "dirtyShortRev": "0319593-dirty",
-        "lastModified": 1789885167,
-        "narHash": "sha256-hX1qZ4ufecpGO/ZMHMQX9hipifEI3gu5y6JTLSsI0Yw=",
+        "lastModified": 1789953013,
+        "narHash": "sha256-azTqbk7uMrsQRzqjfl2n8rGA4loQPHca68mHbjyElls=",
+        "ref": "refs/heads/main",
+        "rev": "738689a98d9c74f461e05401034e896cb9ceaa87",
+        "revCount": 29,
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/giftistry-react"
       },
@@ -91,10 +93,11 @@
     "theming-engine": {
       "flake": false,
       "locked": {
-        "dirtyRev": "cc6bce33bd2ffe8ac4a0be0fe79f5a7eb283ab0c-dirty",
-        "dirtyShortRev": "cc6bce3-dirty",
-        "lastModified": 1784435600,
-        "narHash": "sha256-x/bKFsI6U3rkgVldIg962OHqjpJpmrdwYKwJbfZrKY0=",
+        "lastModified": 1789952925,
+        "narHash": "sha256-8/Lak0W1smWCIE2tgXTCtPAaT1hM76qCFT2i+jUye4Y=",
+        "ref": "refs/heads/main",
+        "rev": "2e74db33f3b52bc65c6cd9cb654f2be1253e9d84",
+        "revCount": 5,
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/theming-engine"
       },

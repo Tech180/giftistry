@@ -69,9 +69,13 @@ let
         chmod -R u+w "${cfg.stateDir}/theming-engine"
       fi
       cd "$appdir"
-      bun install --frozen-lockfile --ignore-scripts
+      bun install --frozen-lockfile --ignore-scripts || bun install --ignore-scripts
       if [ -d "${cfg.stateDir}/theming-engine" ]; then
-        (cd "${cfg.stateDir}/theming-engine" && bun install --frozen-lockfile --ignore-scripts && bun run build)
+        (cd "${cfg.stateDir}/theming-engine" && {
+          bun install --frozen-lockfile --ignore-scripts || bun install --ignore-scripts
+          bun run build
+          test -f dist/js/theme-catalog.json
+        })
       fi
       printf '%s\n' "$stamp" > "$marker"
       chown -R ${cfg.user}:${cfg.group} "$appdir" "$marker" || true
@@ -110,7 +114,7 @@ let
       cp -a "${cfg.package}/lib/giftistry-react/." "$webdir/"
       chmod -R u+w "$webdir"
       cd "$webdir"
-      bun install --frozen-lockfile --ignore-scripts
+      bun install --frozen-lockfile --ignore-scripts || bun install --ignore-scripts
       export VITE_API_URL=""
       # Avoid `bun run build` (runs tsc). Sync catalog then vite only.
       bun run scripts/sync-theme-catalog.ts

@@ -27,7 +27,8 @@ WORKDIR /theming-engine
 COPY theming-engine/package.json theming-engine/bun.lock* ./
 RUN bun install --frozen-lockfile || bun install
 COPY theming-engine/ ./
-RUN bun run build
+RUN bun run build \
+  && test -f dist/js/theme-catalog.json
 
 FROM oven/bun:1.2-debian AS app
 WORKDIR /app

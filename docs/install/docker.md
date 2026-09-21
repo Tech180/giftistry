@@ -28,7 +28,7 @@ docker compose up -d
 | Variable | Notes |
 |----------|--------|
 | `GHCR_OWNER` | Image namespace (default `tech180`; must be lowercase for Docker) |
-| `GIFTISTRY_VERSION` | Image tag pin (e.g. `v0.0.22`) |
+| `GIFTISTRY_VERSION` | Image tag pin (e.g. `v0.0.25`, aligned with giftistry-bun) |
 | `COMPOSE_PROFILES` | Default `db` starts bundled Postgres. **Comment out this one line** to use an external/local DB |
 | `PGHOST` | Default `postgres` (compose service). Set to `host.docker.internal` or your DB host when `db` profile is off |
 | `PGPASSWORD` | Required when profile `db` is on (bundled Postgres) |

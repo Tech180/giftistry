@@ -11,17 +11,20 @@ WORKDIR /theming-engine
 COPY theming-engine/package.json theming-engine/bun.lock* ./
 RUN bun install --frozen-lockfile || bun install
 COPY theming-engine/ ./
-RUN bun run build
+RUN bun run build \
+  && test -f dist/js/theme-catalog.json
 
 FROM oven/bun:1.2-debian AS build
 WORKDIR /web
 COPY giftistry-react/package.json giftistry-react/bun.lock* ./
 RUN bun install --frozen-lockfile || bun install
 COPY giftistry-react/ ./
-COPY --from=theming /theming-engine /theming-engine
+# Sibling path expected by scripts/sync-theme-catalog.ts (ROOT/../theming-engine/…)
+COPY --from=theming /theming-engine/dist /theming-engine/dist
 ARG VITE_API_URL=
 ENV VITE_API_URL=${VITE_API_URL}
-RUN bun run build
+RUN test -f /theming-engine/dist/js/theme-catalog.json \
+  && bun run build
 
 FROM nginx:1.27-alpine AS runtime
 ARG GIFTISTRY_VERSION=dev
