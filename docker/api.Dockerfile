@@ -27,8 +27,9 @@ WORKDIR /theming-engine
 COPY theming-engine/package.json theming-engine/bun.lock* ./
 RUN bun install --frozen-lockfile || bun install
 COPY theming-engine/ ./
-RUN bun run build \
-  && test -f dist/js/theme-catalog.json
+RUN bun run build
+RUN test -f dist/js/theme-catalog.json \
+  || (echo "theming-engine build missing dist/js/theme-catalog.json — need theming-engine >= 0.0.4 (commit 2e74db3+). On the host: cd theming-engine && git pull && docker compose build --no-cache" >&2; exit 1)
 
 FROM oven/bun:1.2-debian AS app
 WORKDIR /app
