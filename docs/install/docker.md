@@ -33,7 +33,7 @@ docker compose up -d
 | `PGHOST` | Default `postgres` (compose service). Set to `host.docker.internal` or your DB host when `db` profile is off |
 | `PGPASSWORD` | Required when profile `db` is on (bundled Postgres) |
 | `JWT_SECRET` | Optional. If unset, Bun auto-generates and writes `/var/lib/giftistry/jwt_secret` on the data volume. Or use `JWT_SECRET_FILE` / credentials dir. Set `GIFTISTRY_AUTO_JWT_SECRET=false` to require an explicit secret |
-| `GIFTISTRY_PUBLIC_APP_URL` | Must match the browser origin |
+| `GIFTISTRY_PUBLIC_APP_URL` | Optional override. Prefer **PublicAppUrl** via onboarding/admin (written to `config.json`) |
 | `WEB_PORT` | Host port for nginx (default `8080`) |
 | `GIFTISTRY_ALLOW_SETUP` | First-run setup gate (default `true`) |
 

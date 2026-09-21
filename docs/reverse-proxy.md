@@ -1,6 +1,6 @@
 # Reverse proxy
 
-Giftistry expects a **single public origin** (`GIFTISTRY_PUBLIC_APP_URL` / `services.giftistry.publicAppUrl`) that browsers use for the SPA, CORS, emails, and WebAuthn.
+Giftistry expects a **single public origin** (`config.json` **PublicAppUrl**, or NixOS `services.giftistry.publicAppUrl`) that browsers use for the SPA, CORS, emails, and WebAuthn. Optional env `GIFTISTRY_PUBLIC_APP_URL` overrides config when set.
 
 You can terminate TLS and route traffic with **any** reverse proxy: Nginx Proxy Manager, Caddy, Traefik, Cloudflare Tunnel, host nginx, etc. The Bun API only listens on a port (default **3001**); it does not embed a proxy.
 
@@ -14,7 +14,7 @@ You can terminate TLS and route traffic with **any** reverse proxy: Nginx Proxy 
 | `/docs` | API | OpenAPI UI |
 | `/health` | API | Healthcheck |
 
-Set `publicAppUrl` / `GIFTISTRY_PUBLIC_APP_URL` to the URL users type in the browser (e.g. `https://gifts.example.com`), not the raw API port.
+Set **PublicAppUrl** (onboarding/admin, or NixOS `publicAppUrl`) to the URL users type in the browser (e.g. `https://gifts.example.com`), not the raw API port.
 
 ## External proxy (recommended for production)
 
@@ -48,7 +48,7 @@ gifts.example.com {
 }
 ```
 
-Set `GIFTISTRY_PUBLIC_APP_URL=https://gifts.example.com`.
+Set **PublicAppUrl** in onboarding/admin to `https://gifts.example.com` (stored in `config.json`).
 
 ## NixOS host-owned nginx (example)
 
@@ -93,4 +93,4 @@ Open ports yourself if needed (`networking.firewall.allowedTCPPorts = [ 80 443 ]
 
 ## CORS / cookies
 
-The public URL must match what browsers use. Changing the domain without updating `publicAppUrl` / `GIFTISTRY_PUBLIC_APP_URL` breaks auth and WebAuthn.
+The public URL must match what browsers use. Changing the domain without updating **PublicAppUrl** (UI/config or NixOS `publicAppUrl`) breaks auth and WebAuthn.
