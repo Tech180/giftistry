@@ -37,7 +37,7 @@ docker compose up -d
 | `WEB_PORT` | Host port for nginx (default `8080`) |
 | `GIFTISTRY_ALLOW_SETUP` | First-run setup gate (default `true`) |
 
-Config file: `./config/config.json` → `/etc/giftistry/config.json` in api/worker.
+Config: `./config/` → `/etc/giftistry/` (must include `config.json`). The API entrypoint chowns this dir and the data volume so onboarding can save settings and JWT auto-persist works.
 
 ## External / host Postgres
 

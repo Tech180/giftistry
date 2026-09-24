@@ -37,7 +37,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY giftistry-bun/ ./
 COPY --from=theming /theming-engine /theming-engine
 ENV PLAYWRIGHT_BROWSERS_PATH=/app/.playwright
-RUN bunx playwright install chromium --with-deps
+# Browser binary only. OS libraries are installed in the runtime stage;
+# apt packages from this stage are not copied forward.
+RUN bunx playwright install chromium
 
 FROM oven/bun:1.2-debian AS runtime
 ARG GIFTISTRY_VERSION=dev
@@ -57,11 +59,23 @@ RUN groupadd -r giftistry && useradd -r -g giftistry -d /app giftistry
 
 COPY --from=app --chown=giftistry:giftistry /app /app
 COPY --from=app --chown=giftistry:giftistry /theming-engine /theming-engine
+COPY giftistry/docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod 755 /usr/local/bin/docker-entrypoint.sh \
+  && mkdir -p /etc/giftistry /var/lib/giftistry \
+  && chown giftistry:giftistry /etc/giftistry /var/lib/giftistry
 
-USER giftistry
+# Playwright's Chromium needs host libs (libglib-2.0, nss, etc.). The
+# browser under /app/.playwright is copied from the app stage; those
+# shared libraries are not, so install them here.
+RUN DEBIAN_FRONTEND=noninteractive bunx playwright install-deps chromium \
+  && rm -rf /var/lib/apt/lists/*
+
+# Entrypoint runs as root to chown bind mounts, then drops to giftistry.
+USER root
 EXPOSE 3001
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
   CMD bun -e "fetch('http://127.0.0.1:' + (process.env.PORT || 3001) + '/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 CMD ["bun", "run", "--no-env-file", "src/index.ts"]
