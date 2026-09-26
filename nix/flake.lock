@@ -21,11 +21,11 @@
     "giftistry-bun": {
       "flake": false,
       "locked": {
-        "lastModified": 1789953118,
-        "narHash": "sha256-6rUVXvINYaNkFicGkZBWVJJt55VOh99UMDWOqy/jpP8=",
+        "lastModified": 1790461503,
+        "narHash": "sha256-6SY5mg0R/ile1Pi9woqcSIAAb8rBrSN6rOV4XxiWpTw=",
         "ref": "refs/heads/main",
-        "rev": "ca3f75e6ff794ccdf47d721173c7644bc099fdef",
-        "revCount": 27,
+        "rev": "05f2d5bf547d0711034263b4e944aca699659354",
+        "revCount": 31,
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/giftistry-bun"
       },
@@ -37,11 +37,11 @@
     "giftistry-react": {
       "flake": false,
       "locked": {
-        "lastModified": 1789953013,
-        "narHash": "sha256-azTqbk7uMrsQRzqjfl2n8rGA4loQPHca68mHbjyElls=",
+        "lastModified": 1790461226,
+        "narHash": "sha256-PZVeIcVwc5rHicClBHALZeAYvflJjsMqPQ43CefLUIo=",
         "ref": "refs/heads/main",
-        "rev": "738689a98d9c74f461e05401034e896cb9ceaa87",
-        "revCount": 29,
+        "rev": "1670a6228fc43e9a63647cd559db0d4242c2b9a1",
+        "revCount": 33,
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/giftistry-react"
       },

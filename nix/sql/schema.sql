@@ -1,7 +1,7 @@
 -- Giftistry PostgreSQL schema (fresh init)
 -- Keep in sync with:
---   giftistry-bun/src/common/database/init-schema.ts
---   giftistry-bun/src/common/database/migrations.ts (tables not in init-schema)
+--   giftistry-bun/src/common/database/schema/initialize-schema.ts
+--   giftistry-bun/src/common/database/migrations/run-migrations.ts
 -- lists.visibility is omitted to match post-migration runtime state.
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -31,6 +31,8 @@ CREATE TABLE users (
     last_online TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     last_login_at TIMESTAMP WITH TIME ZONE DEFAULT NULL,
     is_onboarded BOOLEAN DEFAULT FALSE,
+    tour_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+    experimental_features_json JSONB NOT NULL DEFAULT '{}'::jsonb,
     oauth_sub VARCHAR(255) UNIQUE,
     is_disabled BOOLEAN DEFAULT FALSE,
     is_hidden BOOLEAN DEFAULT FALSE,
@@ -278,6 +280,7 @@ CREATE TABLE comments (
     commenter_name VARCHAR(100) NOT NULL,
     content TEXT NOT NULL,
     is_owner_visible BOOLEAN DEFAULT TRUE,
+    visible_to_user_ids JSONB DEFAULT NULL,
     is_rollover BOOLEAN DEFAULT FALSE,
     is_deleted BOOLEAN DEFAULT FALSE,
     image_url TEXT DEFAULT NULL,
