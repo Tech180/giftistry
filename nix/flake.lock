@@ -37,11 +37,11 @@
     "giftistry-react": {
       "flake": false,
       "locked": {
-        "lastModified": 1790461226,
-        "narHash": "sha256-PZVeIcVwc5rHicClBHALZeAYvflJjsMqPQ43CefLUIo=",
+        "lastModified": 1790470563,
+        "narHash": "sha256-mKBRiJvbm8Oy5WYpCGO6KKdTRE9Sewa1XP/DnvYiOjI=",
         "ref": "refs/heads/main",
-        "rev": "1670a6228fc43e9a63647cd559db0d4242c2b9a1",
-        "revCount": 33,
+        "rev": "359675da77930079d88f2bd12985e282b821d50c",
+        "revCount": 34,
         "type": "git",
         "url": "file:///home/tech180/Documents/projects/giftistry-react"
       },
